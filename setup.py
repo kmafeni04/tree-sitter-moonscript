@@ -38,13 +38,17 @@ setup(
                 "src/parser.c",
                 # NOTE: if your language uses an external scanner, add it here.
             ],
-            extra_compile_args=[
-                "-std=c11",
-                "-fvisibility=hidden",
-            ] if system() != "Windows" else [
-                "/std:c11",
-                "/utf-8",
-            ],
+            extra_compile_args=(
+                [
+                    "-std=c11",
+                    "-fvisibility=hidden",
+                ]
+                if system() != "Windows"
+                else [
+                    "/std:c11",
+                    "/utf-8",
+                ]
+            ),
             define_macros=[
                 ("Py_LIMITED_API", "0x03090000"),
                 ("PY_SSIZE_T_CLEAN", None),
@@ -54,9 +58,6 @@ setup(
             py_limited_api=True,
         )
     ],
-    cmdclass={
-        "build": Build,
-        "bdist_wheel": BdistWheel
-    },
-    zip_safe=False
+    cmdclass={"build": Build, "bdist_wheel": BdistWheel},
+    zip_safe=False,
 )

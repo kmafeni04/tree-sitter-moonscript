@@ -39,7 +39,13 @@
   "tree-sitter": [
     {
       "scope": "source.moonscript",
-      "injection-regex": "^moonscript$"
+      "file-types": [
+        "moon"
+      ],
+      "injection-regex": "moonscript",
+      "highlights": [
+        "queries/highlights.scm"
+      ]
     }
   ]
 }

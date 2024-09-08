@@ -4,11 +4,21 @@
 module.exports = grammar({
   name: "moonscript",
 
+  extras: $ => [
+    /\s/,
+    $.comment,
+    $._multi_line_comment
+  ],
+
   conflicts: $ => [
     [$._assignable, $._expression],
-    [$.block, $.block],
-    [$.expression_list, $.expression_list],
-    
+    [$._assignable, $.function_call, $._expression],
+    [$._assignable_list, $._assignable_list],
+    [$.function_declaration, $.function_declaration],
+    [$.function_call, $.function_call],
+    [$.indented_block, $.indented_block],
+    [$._expression_list, $._expression_list],
+
   ],
 
   rules: {
@@ -17,28 +27,55 @@ module.exports = grammar({
 
     _statement: $ => choice(
       $.assignment,
-      // Add other statement types here
+      $._expression_list
     ),
 
     assignment: $ => seq(
-      $.assignable_list,
-      '=',
-      $.expression_list
+      $._assignable_list,
+      $.operator,
+      $._expression_list
     ),
 
-    assignable_list: $ => prec.left(seq(
+    operator: $ => choice(
+      "=",
+      "-=",
+      "+=",
+      "==",
+      "~=",
+      "!=",
+      "and=",
+      "or=",
+      "..=",
+      "%=",
+      "/=",
+    ),
+
+    _assignable_list: $ => seq(
       $._assignable,
       repeat(seq(',', $._assignable))
-    )),
+    ),
 
     _assignable: $ => choice(
       $.variable,
-      // Add other assignable expressions here
+      $.table,
     ),
 
     variable: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
-    expression_list: $ => seq(
+    table: $ => seq("{", optional($.table_fields), "}"),
+
+    table_fields: $ => seq(
+      choice(
+        $._expression_list,
+        seq($.table_index, "=", $._expression_list),
+        seq($.table_key, "=", $._expression_list)
+      )
+    ),
+
+    table_index: $ => seq("[", $.number, "]"),
+    table_key: $ => seq("[", $.string, "]"),
+
+    _expression_list: $ => seq(
       $._expression,
       repeat(seq(",", $._expression))
     ),
@@ -47,9 +84,9 @@ module.exports = grammar({
       $.variable,
       $.number,
       $.string,
+      $._assignable_list,
       $.function_declaration,
-      $.assignable_list
-      // Add other expression types here
+      $.function_call
     ),
 
     function_declaration: $ => seq(
@@ -58,10 +95,14 @@ module.exports = grammar({
           '(',
           optional($.parameter_list),
           ')',
+          /\s/
         )
       ),
-      '->',
-      $.function_body
+      choice(
+        '=>',
+        '->',
+      ),
+      optional($.function_body)
     ),
 
     parameter_list: $ => seq(
@@ -69,13 +110,45 @@ module.exports = grammar({
       repeat(seq(',', $.variable))
     ),
 
-    function_body: $ => choice(
-      $._expression,
-      $.block
+    function_body: $ => seq(
+      choice(
+        $._expression,
+        $.indented_block
+      ),
     ),
 
-    block: $ => seq(
-      repeat1($._statement)
+    indented_block: $ => seq(
+      repeat1(
+        seq(
+          /\t+/,
+          $._statement
+        )
+      )
+    ),
+
+
+    function_call: $ => seq(
+      $.variable,
+      choice(
+        "!",
+        "()",
+        seq(/\s/, $._expression, repeat(seq(/\s/, $._expression))),
+        seq("(", $._expression_list, ")")
+      )
+    ),
+
+    comment: $ => choice(
+      $._single_line_comment,
+      $._multi_line_comment
+    ),
+
+    _single_line_comment: $ => token(seq('--', /[^\n]*/)),
+    _multi_line_comment: $ => seq(
+      "--[[",
+      // /(.*?[^\[])*\]/,
+      /.*\]/,
+      // /(\s+)?\]/,
+      "]"
     ),
 
     number: $ => /\d+(\.\d+)?/,
