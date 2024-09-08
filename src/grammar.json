@@ -484,7 +484,7 @@
                 },
                 {
                   "type": "SYMBOL",
-                  "name": "_expression"
+                  "name": "argument"
                 },
                 {
                   "type": "REPEAT",
@@ -497,7 +497,7 @@
                       },
                       {
                         "type": "SYMBOL",
-                        "name": "_expression"
+                        "name": "argument"
                       }
                     ]
                   }
@@ -513,7 +513,7 @@
                 },
                 {
                   "type": "SYMBOL",
-                  "name": "_expression_list"
+                  "name": "arguments"
                 },
                 {
                   "type": "STRING",
@@ -524,6 +524,14 @@
           ]
         }
       ]
+    },
+    "argument": {
+      "type": "SYMBOL",
+      "name": "_expression"
+    },
+    "arguments": {
+      "type": "SYMBOL",
+      "name": "_expression_list"
     },
     "comment": {
       "type": "CHOICE",

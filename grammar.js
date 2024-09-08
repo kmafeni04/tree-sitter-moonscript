@@ -112,11 +112,10 @@ module.exports = grammar({
       optional($.function_body)
     ),
 
+
     parameter_list: $ => seq(
       $.identifier,
-
       repeat(seq(',', $.identifier))
-
     ),
 
     function_body: $ => seq(
@@ -142,10 +141,14 @@ module.exports = grammar({
       choice(
         "!",
         "()",
-        seq(/\s/, $._expression, repeat(seq(/\s/, $._expression))),
-        seq("(", $._expression_list, ")")
+        seq(/\s/, $.argument, repeat(seq(/\s/, $.argument))),
+        seq("(", $.arguments, ")")
       )
     ),
+
+    argument: $ => $._expression,
+
+    arguments: $ => $._expression_list,
 
     comment: $ => choice(
       $._single_line_comment,

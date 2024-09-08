@@ -1,2 +1,3 @@
-x = (y,y) -> 
-	print(y)
+x = (a,b,c) -> 
+
+x(a,b,c)
