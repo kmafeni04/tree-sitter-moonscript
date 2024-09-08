@@ -12,18 +12,21 @@ module.exports = grammar({
 
   conflicts: $ => [
     [$._assignable, $._expression],
+    [$._assignable, $.function_call],
     [$._assignable, $.function_call, $._expression],
-    [$._assignable_list, $._assignable_list],
+    // [$._assignable_list, $._assignable_list],
     [$.function_declaration, $.function_declaration],
+    [$._expression, $.function_call],
     [$.function_call, $.function_call],
     [$.indented_block, $.indented_block],
+    [$.source_file, $._expression_list],
     [$._expression_list, $._expression_list],
 
   ],
 
   rules: {
 
-    source_file: $ => repeat($._statement),
+    source_file: $ => repeat(choice($._statement, $._expression, $.comment)),
 
     _statement: $ => choice(
       $.assignment,
@@ -32,7 +35,9 @@ module.exports = grammar({
 
     assignment: $ => seq(
       $._assignable_list,
+      /\s/,
       $.operator,
+      /\s/,
       $._expression_list
     ),
 
@@ -56,19 +61,21 @@ module.exports = grammar({
     ),
 
     _assignable: $ => choice(
-      $.variable,
+      $.identifier,
       $.table,
     ),
 
-    variable: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
+    identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
     table: $ => seq("{", optional($.table_fields), "}"),
 
-    table_fields: $ => seq(
-      choice(
-        $._expression_list,
-        seq($.table_index, "=", $._expression_list),
-        seq($.table_key, "=", $._expression_list)
+    table_fields: $ => repeat1(
+      seq(
+        choice(
+          $._expression_list,
+          seq($.table_index, $.operator, $._expression_list),
+          seq($.table_key, $.operator, $._expression_list)
+        ), optional(",")
       )
     ),
 
@@ -81,10 +88,10 @@ module.exports = grammar({
     ),
 
     _expression: $ => choice(
-      $.variable,
+      $.identifier,
       $.number,
       $.string,
-      $._assignable_list,
+      $.table,
       $.function_declaration,
       $.function_call
     ),
@@ -106,8 +113,10 @@ module.exports = grammar({
     ),
 
     parameter_list: $ => seq(
-      $.variable,
-      repeat(seq(',', $.variable))
+      $.identifier,
+
+      repeat(seq(',', $.identifier))
+
     ),
 
     function_body: $ => seq(
@@ -128,7 +137,8 @@ module.exports = grammar({
 
 
     function_call: $ => seq(
-      $.variable,
+      $.identifier,
+
       choice(
         "!",
         "()",
@@ -143,13 +153,11 @@ module.exports = grammar({
     ),
 
     _single_line_comment: $ => token(seq('--', /[^\n]*/)),
-    _multi_line_comment: $ => seq(
+    _multi_line_comment: $ => token(seq(
       "--[[",
-      // /(.*?[^\[])*\]/,
-      /.*\]/,
-      // /(\s+)?\]/,
-      "]"
-    ),
+      /([^°]+)/,
+      "]]"
+    )),
 
     number: $ => /\d+(\.\d+)?/,
 

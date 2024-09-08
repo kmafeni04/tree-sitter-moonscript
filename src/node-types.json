@@ -16,6 +16,10 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
           "type": "number",
           "named": true
         },
@@ -29,10 +33,6 @@
         },
         {
           "type": "table",
-          "named": true
-        },
-        {
-          "type": "variable",
           "named": true
         }
       ]
@@ -48,8 +48,8 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
-      "required": false,
+      "multiple": false,
+      "required": true,
       "types": [
         {
           "type": "function_call",
@@ -57,6 +57,10 @@
         },
         {
           "type": "function_declaration",
+          "named": true
+        },
+        {
+          "type": "identifier",
           "named": true
         },
         {
@@ -73,10 +77,6 @@
         },
         {
           "type": "table",
-          "named": true
-        },
-        {
-          "type": "variable",
           "named": true
         }
       ]
@@ -99,6 +99,10 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
           "type": "number",
           "named": true
         },
@@ -108,10 +112,6 @@
         },
         {
           "type": "table",
-          "named": true
-        },
-        {
-          "type": "variable",
           "named": true
         }
       ]
@@ -157,6 +157,10 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
           "type": "number",
           "named": true
         },
@@ -166,10 +170,6 @@
         },
         {
           "type": "table",
-          "named": true
-        },
-        {
-          "type": "variable",
           "named": true
         }
       ]
@@ -189,7 +189,7 @@
       "required": true,
       "types": [
         {
-          "type": "variable",
+          "type": "identifier",
           "named": true
         }
       ]
@@ -208,11 +208,19 @@
           "named": true
         },
         {
+          "type": "comment",
+          "named": true
+        },
+        {
           "type": "function_call",
           "named": true
         },
         {
           "type": "function_declaration",
+          "named": true
+        },
+        {
+          "type": "identifier",
           "named": true
         },
         {
@@ -225,10 +233,6 @@
         },
         {
           "type": "table",
-          "named": true
-        },
-        {
-          "type": "variable",
           "named": true
         }
       ]
@@ -271,7 +275,15 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
           "type": "number",
+          "named": true
+        },
+        {
+          "type": "operator",
           "named": true
         },
         {
@@ -288,10 +300,6 @@
         },
         {
           "type": "table_key",
-          "named": true
-        },
-        {
-          "type": "variable",
           "named": true
         }
       ]
@@ -368,10 +376,6 @@
     "named": false
   },
   {
-    "type": "--[[",
-    "named": false
-  },
-  {
     "type": "-=",
     "named": false
   },
@@ -412,16 +416,16 @@
     "named": false
   },
   {
+    "type": "identifier",
+    "named": true
+  },
+  {
     "type": "number",
     "named": true
   },
   {
     "type": "or=",
     "named": false
-  },
-  {
-    "type": "variable",
-    "named": true
   },
   {
     "type": "{",
