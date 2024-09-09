@@ -5,12 +5,13 @@ module.exports = grammar({
   name: "moonscript",
 
   extras: $ => [
+    $.comment,
     /\s/
   ],
 
   conflicts: $ => [
-  [$.update_statement, $.variable_list]
-],
+    [$.update_statement, $.variable_list]
+  ],
 
   rules: {
     source_file: $ => seq(
@@ -69,6 +70,15 @@ module.exports = grammar({
 
     identifier: $ => choice(/[a-zA-Z_][a-zA-Z0-9_]*/, $._constant_identifier),
     _constant_identifier: _ => /[A-Z][a-zA-Z0-9_]*/,
+
+    comment: $ => choice(
+      seq("--", /[^\r\n]*/),
+      seq(
+        seq("--[[", /.*\r?\n/),
+        /([^\]][^\]])*/,
+        "]]"
+      )
+    ),
 
     false: _ => "false",
     true: _ => "true",

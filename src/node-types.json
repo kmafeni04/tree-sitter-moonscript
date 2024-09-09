@@ -19,6 +19,11 @@
     }
   },
   {
+    "type": "comment",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "expression_list",
     "named": true,
     "fields": {},
@@ -174,6 +179,14 @@
     "named": false
   },
   {
+    "type": "--",
+    "named": false
+  },
+  {
+    "type": "--[[",
+    "named": false
+  },
+  {
     "type": "-=",
     "named": false
   },
@@ -187,6 +200,10 @@
   },
   {
     "type": "=",
+    "named": false
+  },
+  {
+    "type": "]]",
     "named": false
   },
   {
