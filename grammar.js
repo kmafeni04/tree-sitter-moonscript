@@ -8,8 +8,9 @@ module.exports = grammar({
 
   conflicts: ($) => [
     [$._expression, $.variable_list],
-    // [$.function_declaration, $.function_declaration],
+    [$._expression, $.function_call],
     [$.expression_list, $.expression_list],
+    [$.arguments, $.arguments],
   ],
 
   rules: {
@@ -41,19 +42,32 @@ module.exports = grammar({
         $.number,
         $.identifier,
         $.function_declaration,
+        $.function_call,
       ),
 
     function_declaration: ($) =>
-      seq("()", choice("->", "=>"), choice(/[\r\n]/, $.statement, $.block)),
+      seq(
+        "()",
+        choice("->", "=>"),
+        choice($._new_line_start, $.statement, $.block),
+      ),
 
     block: ($) =>
       seq(
-        $._block_start,
+        $._new_line_start,
         repeat1(seq($._indent_start, $.statement, /(\r?\n)+/)),
       ),
 
-    _block_start: (_) => /[\r\n]/,
+    _new_line_start: (_) => /[\r\n]/,
     _indent_start: (_) => /[ \t]+/,
+
+    function_call: ($) =>
+      seq(
+        $.identifier,
+        choice("!", seq("(", optional($.arguments), ")"), $.arguments),
+      ),
+
+    arguments: ($) => seq($._expression, repeat(seq(",", $._expression))),
 
     identifier: ($) => choice(/[a-zA-Z_][a-zA-Z0-9_]*/, $._constant_identifier),
     _constant_identifier: (_) => /[A-Z][A-Z0-9_]*/,

@@ -197,6 +197,10 @@
         {
           "type": "SYMBOL",
           "name": "function_declaration"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "function_call"
         }
       ]
     },
@@ -224,8 +228,8 @@
           "type": "CHOICE",
           "members": [
             {
-              "type": "PATTERN",
-              "value": "[\\r\\n]"
+              "type": "SYMBOL",
+              "name": "_new_line_start"
             },
             {
               "type": "SYMBOL",
@@ -244,7 +248,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "_block_start"
+          "name": "_new_line_start"
         },
         {
           "type": "REPEAT1",
@@ -268,13 +272,85 @@
         }
       ]
     },
-    "_block_start": {
+    "_new_line_start": {
       "type": "PATTERN",
       "value": "[\\r\\n]"
     },
     "_indent_start": {
       "type": "PATTERN",
       "value": "[ \\t]+"
+    },
+    "function_call": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "!"
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "("
+                },
+                {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "SYMBOL",
+                      "name": "arguments"
+                    },
+                    {
+                      "type": "BLANK"
+                    }
+                  ]
+                },
+                {
+                  "type": "STRING",
+                  "value": ")"
+                }
+              ]
+            },
+            {
+              "type": "SYMBOL",
+              "name": "arguments"
+            }
+          ]
+        }
+      ]
+    },
+    "arguments": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_expression"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": ","
+              },
+              {
+                "type": "SYMBOL",
+                "name": "_expression"
+              }
+            ]
+          }
+        }
+      ]
     },
     "identifier": {
       "type": "CHOICE",
@@ -374,8 +450,16 @@
       "variable_list"
     ],
     [
+      "_expression",
+      "function_call"
+    ],
+    [
       "expression_list",
       "expression_list"
+    ],
+    [
+      "arguments",
+      "arguments"
     ]
   ],
   "precedences": [],
