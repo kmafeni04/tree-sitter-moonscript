@@ -4,87 +4,71 @@
 module.exports = grammar({
   name: "moonscript",
 
-  extras: $ => [
-    $.comment,
-    /\s/
-  ],
+  extras: ($) => [$.comment, /\s/],
 
-  conflicts: $ => [
-    [$.update_statement, $.variable_list]
+  conflicts: ($) => [
+    [$._expression, $.variable_list],
+    // [$.function_declaration, $.function_declaration],
+    [$.expression_list, $.expression_list],
   ],
 
   rules: {
-    source_file: $ => seq(
-      optional($.hash_bang_line),
-      repeat($.statement),
-    ),
+    source_file: ($) => seq(optional($.hash_bang_line), repeat($.statement)),
 
     hash_bang_line: (_) => /#.*/,
 
-    statement: $ => choice(
-      $.assignment_statement,
-      $.update_statement
-    ),
+    statement: ($) =>
+      choice($.assignment_statement, $.update_statement, $.expression_list),
 
-    assignment_statement: $ => seq(
-      $.variable_list,
-      "=",
-      $.expression_list
-    ),
+    assignment_statement: ($) => seq($.variable_list, "=", $.expression_list),
 
-    variable_list: $ => seq($.variable, repeat(seq(",", $.variable))),
+    variable_list: ($) => seq($.identifier, repeat(seq(",", $.identifier))),
 
-    variable: $ => $.identifier,
+    update_statement: ($) =>
+      seq($.identifier, $._update_operator, $._expression),
 
+    _update_operator: (_) =>
+      choice("+=", "-=", "*=", "/=", "%=", "and=", "or=", "..="),
 
-    update_statement: $ => seq(
-      $.variable,
-      $._update_operator,
-      $._expression
-    ),
+    expression_list: ($) => seq($._expression, repeat(seq(",", $._expression))),
 
-    _update_operator: $ => choice(
-      "=",
-      "+=",
-      "-=",
-      "*=",
-      "/=",
-      "%=",
-      "and=",
-      "or=",
-      "..="
-    ),
+    _expression: ($) =>
+      choice(
+        $.true,
+        $.false,
+        $.nil,
+        $.string,
+        $.number,
+        $.identifier,
+        $.function_declaration,
+      ),
 
-    expression_list: $ => seq(
-      $._expression,
-      repeat(seq(",", $._expression))
-    ),
+    function_declaration: ($) =>
+      seq("()", choice("->", "=>"), choice(/[\r\n]/, $.statement, $.block)),
 
-    _expression: $ => choice(
-      $.false,
-      $.true,
-      $.nil,
-      $.string,
-      $.number
-    ),
-
-    identifier: $ => choice(/[a-zA-Z_][a-zA-Z0-9_]*/, $._constant_identifier),
-    _constant_identifier: _ => /[A-Z][a-zA-Z0-9_]*/,
-
-    comment: $ => choice(
-      seq("--", /[^\r\n]*/),
+    block: ($) =>
       seq(
-        seq("--[[", /.*\r?\n/),
-        /([^\]][^\]])*/,
-        "]]"
-      )
-    ),
+        $._block_start,
+        repeat1(seq($._indent_start, $.statement, /(\r?\n)+/)),
+      ),
 
-    false: _ => "false",
-    true: _ => "true",
-    nil: _ => "nil",
+    _block_start: (_) => /[\r\n]/,
+    _indent_start: (_) => /[ \t]+/,
 
-    string: _ => /"[^"]*"/,
-    number: _ => /\d+(\.\d+)?/
-  }
-})
+    identifier: ($) => choice(/[a-zA-Z_][a-zA-Z0-9_]*/, $._constant_identifier),
+    _constant_identifier: (_) => /[A-Z][A-Z0-9_]*/,
+
+    comment: (_) =>
+      choice(
+        seq("--", /[^\r\n]*/),
+        seq(seq("--[[", /.*\r?\n/), /([^\]][^\]])*/, "]]"),
+      ),
+
+    false: (_) => "false",
+    true: (_) => "true",
+    nil: (_) => "nil",
+
+    string: (_) => /"[^"]*"/,
+    number: (_) => /\d+(\.\d+)?/,
+  },
+});

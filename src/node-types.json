@@ -19,6 +19,21 @@
     }
   },
   {
+    "type": "block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "comment",
     "named": true,
     "fields": {}
@@ -36,6 +51,14 @@
           "named": true
         },
         {
+          "type": "function_declaration",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
           "type": "nil",
           "named": true
         },
@@ -49,6 +72,25 @@
         },
         {
           "type": "true",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "function_declaration",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "statement",
           "named": true
         }
       ]
@@ -91,6 +133,10 @@
           "named": true
         },
         {
+          "type": "expression_list",
+          "named": true
+        },
+        {
           "type": "update_statement",
           "named": true
         }
@@ -110,6 +156,14 @@
           "named": true
         },
         {
+          "type": "function_declaration",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
           "type": "nil",
           "named": true
         },
@@ -124,25 +178,6 @@
         {
           "type": "true",
           "named": true
-        },
-        {
-          "type": "variable",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "variable",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
         }
       ]
     }
@@ -156,7 +191,7 @@
       "required": true,
       "types": [
         {
-          "type": "variable",
+          "type": "identifier",
           "named": true
         }
       ]
@@ -164,6 +199,10 @@
   },
   {
     "type": "%=",
+    "named": false
+  },
+  {
+    "type": "()",
     "named": false
   },
   {
@@ -191,6 +230,10 @@
     "named": false
   },
   {
+    "type": "->",
+    "named": false
+  },
+  {
     "type": "..=",
     "named": false
   },
@@ -200,6 +243,10 @@
   },
   {
     "type": "=",
+    "named": false
+  },
+  {
+    "type": "=>",
     "named": false
   },
   {
