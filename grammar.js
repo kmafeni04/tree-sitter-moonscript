@@ -10,15 +10,15 @@ module.exports = grammar({
     [$._expression, $.variable_list],
     [$._expression, $.function_call],
     [$.expression_list, $.expression_list],
-    [$.arguments, $.arguments],
+    // [$.arguments, $.arguments],
   ],
 
   rules: {
-    source_file: ($) => seq(optional($.hash_bang_line), repeat($.statement)),
+    source_file: ($) => seq(optional($.hash_bang_line), repeat($._statement)),
 
     hash_bang_line: (_) => /#.*/,
 
-    statement: ($) =>
+    _statement: ($) =>
       choice($.assignment_statement, $.update_statement, $.expression_list),
 
     assignment_statement: ($) => seq($.variable_list, "=", $.expression_list),
@@ -41,25 +41,19 @@ module.exports = grammar({
         $.string,
         $.number,
         $.identifier,
+        $.table_constructor,
         $.function_declaration,
         $.function_call,
       ),
 
     function_declaration: ($) =>
-      seq(
-        "()",
-        choice("->", "=>"),
-        choice($._new_line_start, $.statement, $.block),
-      ),
+      seq("()", choice("->", "=>"), choice($._new_line, $._statement, $.block)),
 
     block: ($) =>
-      seq(
-        $._new_line_start,
-        repeat1(seq($._indent_start, $.statement, /(\r?\n)+/)),
-      ),
+      seq($._new_line, repeat1(seq($._indent, $._statement, /(\r?\n)+/))),
 
-    _new_line_start: (_) => /[\r\n]/,
-    _indent_start: (_) => /[ \t]+/,
+    _new_line: (_) => /[\r\n]/,
+    _indent: (_) => /[ \t]+/,
 
     function_call: ($) =>
       seq(
@@ -67,7 +61,14 @@ module.exports = grammar({
         choice("!", seq("(", optional($.arguments), ")"), $.arguments),
       ),
 
-    arguments: ($) => seq($._expression, repeat(seq(",", $._expression))),
+    arguments: ($) => alias($.expression_list, "arguments"),
+
+    // Todo finish table fields
+    table_constructor: ($) => seq("{", optional($._field_list), "}"),
+
+    _field_list: ($) => seq($.field, repeat(seq(",", $.field)), optional(",")),
+
+    field: ($) => alias($._expression, "field"),
 
     identifier: ($) => choice(/[a-zA-Z_][a-zA-Z0-9_]*/, $._constant_identifier),
     _constant_identifier: (_) => /[A-Z][A-Z0-9_]*/,

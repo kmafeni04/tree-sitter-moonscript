@@ -20,7 +20,7 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "statement"
+            "name": "_statement"
           }
         }
       ]
@@ -29,7 +29,7 @@
       "type": "PATTERN",
       "value": "#.*"
     },
-    "statement": {
+    "_statement": {
       "type": "CHOICE",
       "members": [
         {
@@ -196,6 +196,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "table_constructor"
+        },
+        {
+          "type": "SYMBOL",
           "name": "function_declaration"
         },
         {
@@ -229,11 +233,11 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "_new_line_start"
+              "name": "_new_line"
             },
             {
               "type": "SYMBOL",
-              "name": "statement"
+              "name": "_statement"
             },
             {
               "type": "SYMBOL",
@@ -248,7 +252,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "_new_line_start"
+          "name": "_new_line"
         },
         {
           "type": "REPEAT1",
@@ -257,11 +261,11 @@
             "members": [
               {
                 "type": "SYMBOL",
-                "name": "_indent_start"
+                "name": "_indent"
               },
               {
                 "type": "SYMBOL",
-                "name": "statement"
+                "name": "_statement"
               },
               {
                 "type": "PATTERN",
@@ -272,11 +276,11 @@
         }
       ]
     },
-    "_new_line_start": {
+    "_new_line": {
       "type": "PATTERN",
       "value": "[\\r\\n]"
     },
-    "_indent_start": {
+    "_indent": {
       "type": "PATTERN",
       "value": "[ \\t]+"
     },
@@ -328,11 +332,45 @@
       ]
     },
     "arguments": {
+      "type": "ALIAS",
+      "content": {
+        "type": "SYMBOL",
+        "name": "expression_list"
+      },
+      "named": false,
+      "value": "arguments"
+    },
+    "table_constructor": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "{"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_field_list"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "STRING",
+          "value": "}"
+        }
+      ]
+    },
+    "_field_list": {
       "type": "SEQ",
       "members": [
         {
           "type": "SYMBOL",
-          "name": "_expression"
+          "name": "field"
         },
         {
           "type": "REPEAT",
@@ -345,12 +383,33 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "_expression"
+                "name": "field"
               }
             ]
           }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": ","
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         }
       ]
+    },
+    "field": {
+      "type": "ALIAS",
+      "content": {
+        "type": "SYMBOL",
+        "name": "_expression"
+      },
+      "named": false,
+      "value": "field"
     },
     "identifier": {
       "type": "CHOICE",
@@ -456,10 +515,6 @@
     [
       "expression_list",
       "expression_list"
-    ],
-    [
-      "arguments",
-      "arguments"
     ]
   ],
   "precedences": [],
