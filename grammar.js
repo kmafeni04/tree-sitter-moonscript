@@ -103,7 +103,10 @@ module.exports = grammar({
     true: (_) => "true",
     nil: (_) => "nil",
 
-    string: (_) => /"[^"]*"/,
+    string: ($) =>
+      seq('"', repeat(choice($.interpolation, $._string_content)), '"'),
+    _string_content: () => /[^"#]+|#[^{]/,
+    interpolation: ($) => seq("#{", $._expression, "}"),
     number: (_) => /\d+(\.\d+)?/,
   },
 });
