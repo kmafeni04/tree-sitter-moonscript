@@ -10,11 +10,15 @@ module.exports = grammar({
     [$._expression, $.variable_list],
     [$._expression, $.function_call],
     [$.expression_list, $.expression_list],
-    // [$.arguments, $.arguments],
+    [$.block, $.block],
   ],
 
   rules: {
-    source_file: ($) => seq(optional($.hash_bang_line), repeat($._statement)),
+    source_file: ($) =>
+      seq(
+        optional($.hash_bang_line),
+        repeat(seq($._statement, optional($._new_line))),
+      ),
 
     hash_bang_line: (_) => /#.*/,
 
@@ -23,7 +27,8 @@ module.exports = grammar({
 
     assignment_statement: ($) => seq($.variable_list, "=", $.expression_list),
 
-    variable_list: ($) => seq($.identifier, repeat(seq(",", $.identifier))),
+    variable_list: ($) =>
+      seq($.identifier, repeat(seq(",", $.identifier)), optional(",")),
 
     update_statement: ($) =>
       seq($.identifier, $._update_operator, $._expression),
@@ -31,7 +36,8 @@ module.exports = grammar({
     _update_operator: (_) =>
       choice("+=", "-=", "*=", "/=", "%=", "and=", "or=", "..="),
 
-    expression_list: ($) => seq($._expression, repeat(seq(",", $._expression))),
+    expression_list: ($) =>
+      seq($._expression, repeat(seq(",", $._expression)), optional(",")),
 
     _expression: ($) =>
       choice(
@@ -49,10 +55,9 @@ module.exports = grammar({
     function_declaration: ($) =>
       seq("()", choice("->", "=>"), choice($._new_line, $._statement, $.block)),
 
-    block: ($) =>
-      seq($._new_line, repeat1(seq($._indent, $._statement, /(\r?\n)+/))),
+    block: ($) => repeat1(seq($._new_line, $._indent, $._statement)),
 
-    _new_line: (_) => /[\r\n]/,
+    _new_line: (_) => /\r?\n/,
     _indent: (_) => /[ \t]+/,
 
     function_call: ($) =>

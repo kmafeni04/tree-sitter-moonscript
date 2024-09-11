@@ -19,8 +19,25 @@
         {
           "type": "REPEAT",
           "content": {
-            "type": "SYMBOL",
-            "name": "_statement"
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_statement"
+              },
+              {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "_new_line"
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
+              }
+            ]
           }
         }
       ]
@@ -85,6 +102,18 @@
               }
             ]
           }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": ","
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         }
       ]
     },
@@ -164,6 +193,18 @@
               }
             ]
           }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": ","
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         }
       ]
     },
@@ -248,37 +289,28 @@
       ]
     },
     "block": {
-      "type": "SEQ",
-      "members": [
-        {
-          "type": "SYMBOL",
-          "name": "_new_line"
-        },
-        {
-          "type": "REPEAT1",
-          "content": {
-            "type": "SEQ",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "_indent"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "_statement"
-              },
-              {
-                "type": "PATTERN",
-                "value": "(\\r?\\n)+"
-              }
-            ]
+      "type": "REPEAT1",
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "_new_line"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "_indent"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "_statement"
           }
-        }
-      ]
+        ]
+      }
     },
     "_new_line": {
       "type": "PATTERN",
-      "value": "[\\r\\n]"
+      "value": "\\r?\\n"
     },
     "_indent": {
       "type": "PATTERN",
@@ -515,6 +547,10 @@
     [
       "expression_list",
       "expression_list"
+    ],
+    [
+      "block",
+      "block"
     ]
   ],
   "precedences": [],
