@@ -4,13 +4,14 @@
 module.exports = grammar({
   name: "moonscript",
 
-  extras: ($) => [$.comment, /\s/],
+  extras: ($) => [$.comment, /[ \t]/],
 
   conflicts: ($) => [
     [$._expression, $.variable_list],
     [$._expression, $.function_call],
     [$.expression_list, $.expression_list],
     [$.block, $.block],
+    [$._statement, $.function_declaration],
   ],
 
   rules: {
@@ -23,21 +24,24 @@ module.exports = grammar({
     hash_bang_line: (_) => /#.*/,
 
     _statement: ($) =>
-      choice($.assignment_statement, $.update_statement, $.expression_list),
+      choice(
+        $.assignment_statement,
+        $.update_statement,
+        $.expression_list,
+        $._new_line,
+      ),
 
     assignment_statement: ($) => seq($.variable_list, "=", $.expression_list),
 
-    variable_list: ($) =>
-      seq($.identifier, repeat(seq(",", $.identifier)), optional(",")),
+    variable_list: ($) => seq($.identifier, repeat(seq(",", $.identifier))),
 
     update_statement: ($) =>
-      seq($.identifier, $._update_operator, $._expression),
+      seq($.identifier, $._update_operator, /[^\r\n]/, $._expression),
 
     _update_operator: (_) =>
       choice("+=", "-=", "*=", "/=", "%=", "and=", "or=", "..="),
 
-    expression_list: ($) =>
-      seq($._expression, repeat(seq(",", $._expression)), optional(",")),
+    expression_list: ($) => seq($._expression, repeat(seq(",", $._expression))),
 
     _expression: ($) =>
       choice(
@@ -71,9 +75,20 @@ module.exports = grammar({
     // Todo finish table fields
     table_constructor: ($) => seq("{", optional($._field_list), "}"),
 
-    _field_list: ($) => seq($.field, repeat(seq(",", $.field)), optional(",")),
+    _field_list: ($) =>
+      seq(
+        optional($._new_line),
+        $.field,
+        repeat(seq(",", optional($._new_line), $.field)),
+        optional(","),
+        optional($._new_line),
+      ),
 
-    field: ($) => alias($._expression, "field"),
+    field: ($) =>
+      choice(
+        seq("[", choice($.number, $.string), "]", ":", $._expression),
+        alias($._expression, "field"),
+      ),
 
     identifier: ($) => choice(/[a-zA-Z_][a-zA-Z0-9_]*/, $._constant_identifier),
     _constant_identifier: (_) => /[A-Z][A-Z0-9_]*/,
