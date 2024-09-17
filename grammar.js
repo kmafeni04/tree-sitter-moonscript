@@ -12,6 +12,7 @@ module.exports = grammar({
     [$.expression_list, $.expression_list],
     [$.block, $.block],
     [$._statement, $.function_declaration],
+    [$.if_statement, $.if_statement],
   ],
 
   rules: {
@@ -28,6 +29,9 @@ module.exports = grammar({
         $.assignment_statement,
         $.update_statement,
         $.expression_list,
+        $.if_statement,
+        $.for_statement,
+        $.while_statement,
         $._new_line,
       ),
 
@@ -40,6 +44,59 @@ module.exports = grammar({
 
     _update_operator: (_) =>
       choice("+=", "-=", "*=", "/=", "%=", "and=", "or=", "..="),
+
+    if_statement: ($) =>
+      seq(
+        "if",
+        $._expression,
+        "then",
+        choice($._statement, $.block),
+        optional($.else_if),
+        optional($.else),
+      ),
+
+    else_if: ($) =>
+      seq(
+        optional($._new_line),
+        "elseif",
+        $._expression,
+        "then",
+        choice($._statement, $.block),
+      ),
+
+    else: ($) =>
+      seq(optional($._new_line), "else", choice($._statement, $.block)),
+
+    for_statement: ($) => seq("for", choice($.for_func, $.for_num)),
+
+    for_func: ($) =>
+      seq(
+        $.identifier,
+        optional(repeat(seq(",", $.identifier))),
+        "in",
+        $.function_call,
+        choice($._statement, $.block),
+      ),
+    for_num: ($) =>
+      seq(
+        $.identifier,
+        optional(repeat(seq(",", $.identifier))),
+        "=",
+        $.number,
+        optional(repeat(seq(",", $.number))),
+        choice($._statement, $.block),
+      ),
+
+    while_statement: ($) =>
+      seq(
+        "while",
+        $._expression,
+        choice(seq("do", choice($._statement, $.block)), $.block),
+      ),
+
+    comparison_expression: ($) =>
+      seq($.identifier, $._comparison_operator, $._expression),
+    _comparison_operator: (_) => choice("==", "<=", ">=", "~=", "!=", "<", ">"),
 
     expression_list: ($) => seq($._expression, repeat(seq(",", $._expression))),
 
@@ -54,20 +111,22 @@ module.exports = grammar({
         $.table_constructor,
         $.function_declaration,
         $.function_call,
+        $.comparison_expression,
       ),
 
     function_declaration: ($) =>
       seq("()", choice("->", "=>"), choice($._new_line, $._statement, $.block)),
 
-    block: ($) => repeat1(seq($._new_line, $._indent, $._statement)),
+    block: ($) => seq(repeat1(seq($._new_line, $._indent, $._statement))),
 
     _new_line: (_) => /\r?\n/,
-    _indent: (_) => /[ \t]+/,
+    _indent: (_) => /\t|  /,
+    _dedent: (_) => /\r?\n(?:[ \t]*)/,
 
     function_call: ($) =>
       seq(
         $.identifier,
-        choice("!", seq("(", optional($.arguments), ")"), $.arguments),
+        choice("!", "()", seq("(", optional($.arguments), ")"), $.arguments),
       ),
 
     arguments: ($) => alias($.expression_list, "arguments"),
