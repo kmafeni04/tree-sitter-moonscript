@@ -1172,17 +1172,9 @@
                 },
                 {
                   "type": "PATTERN",
-                  "value": ".*\\r?\\n"
+                  "value": "[^🖼]+\\]\\]"
                 }
               ]
-            },
-            {
-              "type": "PATTERN",
-              "value": "([^\\]][^\\]])*"
-            },
-            {
-              "type": "STRING",
-              "value": "]]"
             }
           ]
         }

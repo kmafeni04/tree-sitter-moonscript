@@ -59,12 +59,12 @@
   "}"
 ] @constructor)
 
-(table_field
-  (identifier) @variable.other.member)
+ (table_constructor
+  (table_field
+    (identifier) @variable.member))
 
 (dot_expression
-  (dot_field) @variable.other.member
-  )
+  (dot_field) @variable.member)
 
 (function_declaration) @function
 
