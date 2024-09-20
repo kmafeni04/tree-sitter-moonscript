@@ -19,6 +19,7 @@
 [
   ","
   ":"
+  "."
 ] @punctuation.delimiter
 
 [
@@ -60,13 +61,13 @@
 ] @constructor)
 
  (table_constructor
-  (table_field
-    (identifier) @variable.member))
+  (table_field) @variable.other.member)
 
-(dot_expression
-  (dot_field) @variable.member)
+(dot_field) @variable.other.member
 
-(function_declaration) @function
+(function_declaration
+  (function_parameters) @variable.parameter
+  ) @function
 
 (function_call
   (identifier) @function

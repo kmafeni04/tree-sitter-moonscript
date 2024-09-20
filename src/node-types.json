@@ -744,6 +744,10 @@
           "named": true
         },
         {
+          "type": "function_parameters",
+          "named": true
+        },
+        {
           "type": "if_statement",
           "named": true
         },
@@ -761,6 +765,21 @@
         },
         {
           "type": "while_statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "function_parameters",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
           "named": true
         }
       ]

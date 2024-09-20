@@ -772,8 +772,30 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "STRING",
-          "value": "()"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "()"
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "("
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "function_parameters"
+                },
+                {
+                  "type": "STRING",
+                  "value": ")"
+                }
+              ]
+            }
+          ]
         },
         {
           "type": "CHOICE",
@@ -804,6 +826,31 @@
               "name": "block"
             }
           ]
+        }
+      ]
+    },
+    "function_parameters": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": ","
+              },
+              {
+                "type": "SYMBOL",
+                "name": "identifier"
+              }
+            ]
+          }
         }
       ]
     },
@@ -1269,6 +1316,10 @@
     [
       "_expression",
       "function_call"
+    ],
+    [
+      "_expression",
+      "function_parameters"
     ],
     [
       "variable_list",

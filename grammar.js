@@ -9,6 +9,7 @@ module.exports = grammar({
   conflicts: ($) => [
     [$._expression, $.variable_list],
     [$._expression, $.function_call],
+    [$._expression, $.function_parameters],
     [$.variable_list, $._expression, $.function_call],
     [$.variable_list, $.variable_list],
     [$.expression_list, $.expression_list],
@@ -138,8 +139,14 @@ module.exports = grammar({
       ),
 
     function_declaration: ($) =>
-      seq("()", choice("->", "=>"), choice($._new_line, $._statement, $.block)),
+      seq(
+        choice("()", seq("(", $.function_parameters, ")")),
+        choice("->", "=>"),
+        choice($._new_line, $._statement, $.block),
+      ),
 
+    function_parameters: ($) =>
+      seq($.identifier, repeat(seq(",", $.identifier))),
     block: ($) => seq(repeat1(seq($._new_line, $._indent, $._statement))),
 
     _new_line: (_) => /\r?\n/,
