@@ -59,7 +59,8 @@
   "}"
 ] @constructor)
 
-(table_field) @variable.other.member
+(table_field
+  (identifier) @variable.other.member)
 
 (dot_expression
   (dot_field) @variable.other.member
