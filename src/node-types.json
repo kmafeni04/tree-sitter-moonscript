@@ -78,7 +78,7 @@
       "required": false,
       "types": [
         {
-          "type": "assignment_statement",
+          "type": "export",
           "named": true
         },
         {
@@ -94,7 +94,15 @@
           "named": true
         },
         {
+          "type": "return",
+          "named": true
+        },
+        {
           "type": "update_statement",
+          "named": true
+        },
+        {
+          "type": "variable_statement",
           "named": true
         },
         {
@@ -165,15 +173,15 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": false,
       "types": [
         {
-          "type": "assignment_statement",
+          "type": "block",
           "named": true
         },
         {
-          "type": "block",
+          "type": "export",
           "named": true
         },
         {
@@ -189,7 +197,15 @@
           "named": true
         },
         {
+          "type": "return",
+          "named": true
+        },
+        {
           "type": "update_statement",
+          "named": true
+        },
+        {
+          "type": "variable_statement",
           "named": true
         },
         {
@@ -208,15 +224,15 @@
       "required": true,
       "types": [
         {
-          "type": "assignment_statement",
-          "named": true
-        },
-        {
           "type": "block",
           "named": true
         },
         {
           "type": "comparison_expression",
+          "named": true
+        },
+        {
+          "type": "export",
           "named": true
         },
         {
@@ -256,6 +272,10 @@
           "named": true
         },
         {
+          "type": "return",
+          "named": true
+        },
+        {
           "type": "string",
           "named": true
         },
@@ -269,6 +289,10 @@
         },
         {
           "type": "update_statement",
+          "named": true
+        },
+        {
+          "type": "variable_statement",
           "named": true
         },
         {
@@ -389,11 +413,11 @@
       "required": true,
       "types": [
         {
-          "type": "assignment_statement",
+          "type": "block",
           "named": true
         },
         {
-          "type": "block",
+          "type": "export",
           "named": true
         },
         {
@@ -417,7 +441,15 @@
           "named": true
         },
         {
+          "type": "return",
+          "named": true
+        },
+        {
           "type": "update_statement",
+          "named": true
+        },
+        {
+          "type": "variable_statement",
           "named": true
         },
         {
@@ -436,11 +468,11 @@
       "required": true,
       "types": [
         {
-          "type": "assignment_statement",
+          "type": "block",
           "named": true
         },
         {
-          "type": "block",
+          "type": "export",
           "named": true
         },
         {
@@ -464,7 +496,15 @@
           "named": true
         },
         {
+          "type": "return",
+          "named": true
+        },
+        {
           "type": "update_statement",
+          "named": true
+        },
+        {
+          "type": "variable_statement",
           "named": true
         },
         {
@@ -517,15 +557,15 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": false,
       "types": [
         {
-          "type": "assignment_statement",
+          "type": "block",
           "named": true
         },
         {
-          "type": "block",
+          "type": "export",
           "named": true
         },
         {
@@ -541,7 +581,15 @@
           "named": true
         },
         {
+          "type": "return",
+          "named": true
+        },
+        {
           "type": "update_statement",
+          "named": true
+        },
+        {
+          "type": "variable_statement",
           "named": true
         },
         {
@@ -565,10 +613,6 @@
       "required": true,
       "types": [
         {
-          "type": "assignment_statement",
-          "named": true
-        },
-        {
           "type": "block",
           "named": true
         },
@@ -582,6 +626,10 @@
         },
         {
           "type": "else_if",
+          "named": true
+        },
+        {
+          "type": "export",
           "named": true
         },
         {
@@ -621,6 +669,10 @@
           "named": true
         },
         {
+          "type": "return",
+          "named": true
+        },
+        {
           "type": "string",
           "named": true
         },
@@ -634,6 +686,10 @@
         },
         {
           "type": "update_statement",
+          "named": true
+        },
+        {
+          "type": "variable_statement",
           "named": true
         },
         {
@@ -703,7 +759,7 @@
       "required": false,
       "types": [
         {
-          "type": "assignment_statement",
+          "type": "export",
           "named": true
         },
         {
@@ -723,7 +779,15 @@
           "named": true
         },
         {
+          "type": "return",
+          "named": true
+        },
+        {
           "type": "update_statement",
+          "named": true
+        },
+        {
+          "type": "variable_statement",
           "named": true
         },
         {
@@ -830,7 +894,7 @@
     }
   },
   {
-    "type": "while_statement",
+    "type": "variable_statement",
     "named": true,
     "fields": {},
     "children": {
@@ -842,11 +906,34 @@
           "named": true
         },
         {
+          "type": "local",
+          "named": true
+        },
+        {
+          "type": "variable_list",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "while_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
           "type": "block",
           "named": true
         },
         {
           "type": "comparison_expression",
+          "named": true
+        },
+        {
+          "type": "export",
           "named": true
         },
         {
@@ -886,6 +973,10 @@
           "named": true
         },
         {
+          "type": "return",
+          "named": true
+        },
+        {
           "type": "string",
           "named": true
         },
@@ -899,6 +990,10 @@
         },
         {
           "type": "update_statement",
+          "named": true
+        },
+        {
+          "type": "variable_statement",
           "named": true
         },
         {
@@ -1021,6 +1116,10 @@
     "named": false
   },
   {
+    "type": "and",
+    "named": false
+  },
+  {
     "type": "and=",
     "named": false
   },
@@ -1035,6 +1134,10 @@
   {
     "type": "elseif",
     "named": false
+  },
+  {
+    "type": "export",
+    "named": true
   },
   {
     "type": "false",
@@ -1057,16 +1160,32 @@
     "named": false
   },
   {
+    "type": "local",
+    "named": true
+  },
+  {
     "type": "nil",
     "named": true
+  },
+  {
+    "type": "not",
+    "named": false
   },
   {
     "type": "number",
     "named": true
   },
   {
+    "type": "or",
+    "named": false
+  },
+  {
     "type": "or=",
     "named": false
+  },
+  {
+    "type": "return",
+    "named": true
   },
   {
     "type": "then",

@@ -1,2 +1,4 @@
-while x do 
-	print y
+{ [1]: () -> 
+	1,
+	1
+}
