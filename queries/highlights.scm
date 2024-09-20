@@ -4,9 +4,9 @@
 
 [(return) (export) (local)] @keyword
 
-(number) @number
+(number) @constant
 
-[(false) (true)] @boolean
+[(false) (true)] @constant.builtin
 
 (nil) @constant.builtin
 
@@ -47,11 +47,6 @@
 
 (identifier) @variable
 
-(variable_statement 
-  (variable_list 
-    (identifier) @variable)
-  )
-
 (table_constructor
 [
   "{"
@@ -60,7 +55,17 @@
 
 (function_declaration) @function
 
-(function_call) @function
+(function_call
+  (identifier) @function
+) @function
+
+(function_call
+  (builtin_function) @function.builtin )
+
+(function_call 
+  (identifier)
+  (arguments
+    ) @variable) 
 
 (if_statement
 [
@@ -68,19 +73,45 @@
   "elseif"
   "else"
   "then"
-] @conditional)
+] @keyword.control)
+
+(if_statement
+[
+  "if"
+  "elseif"
+  "else"
+] @keyword.control)
+
+(else_if
+[
+  "elseif"
+] @keyword.control
+)
+
+(else) @keyword.control
 
 (for_statement
 [
   "for"
-  "do"
-] @repeat)
+] @keyword.control)
+
+(for_func
+[
+ "in" 
+ "do"
+] @keyword.control)
+
+(for_num
+[
+ "do"
+] @keyword.control)
+
 
 (while_statement
 [
   "while"
   "do"
-] @repeat)
+] @keyword.control)
 
 
 

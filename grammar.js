@@ -62,7 +62,7 @@ module.exports = grammar({
       seq(
         "if",
         $._expression,
-        "then",
+        optional("then"),
         choice($._statement, $.block),
         optional($.else_if),
         optional($.else),
@@ -73,7 +73,7 @@ module.exports = grammar({
         optional($._new_line),
         "elseif",
         $._expression,
-        "then",
+        optional("then"),
         choice($._statement, $.block),
       ),
 
@@ -88,6 +88,7 @@ module.exports = grammar({
         optional(repeat(seq(",", $.identifier))),
         "in",
         $.function_call,
+        optional("do"),
         choice($._statement, $.block),
       ),
     for_num: ($) =>
@@ -97,6 +98,7 @@ module.exports = grammar({
         "=",
         $.number,
         optional(repeat(seq(",", $.number))),
+        optional("do"),
         choice($._statement, $.block),
       ),
 
@@ -137,14 +139,16 @@ module.exports = grammar({
     block: ($) => seq(repeat1(seq($._new_line, $._indent, $._statement))),
 
     _new_line: (_) => /\r?\n/,
-    _indent: (_) => /\t|    /,
+    _indent: (_) => /[\t ]/,
     _dedent: (_) => /\r?\n(?:[ \t]*)/,
 
     function_call: ($) =>
       seq(
-        $.identifier,
+        choice($.identifier, $.builtin_function),
         choice("!", "()", seq("(", optional($.arguments), ")"), $.arguments),
       ),
+
+    builtin_function: (_) => choice("print", "ipairs", "pairs"),
 
     arguments: ($) => alias($.expression_list, "arguments"),
 

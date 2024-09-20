@@ -259,8 +259,16 @@
           "name": "_expression"
         },
         {
-          "type": "STRING",
-          "value": "then"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "then"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         },
         {
           "type": "CHOICE",
@@ -325,8 +333,16 @@
           "name": "_expression"
         },
         {
-          "type": "STRING",
-          "value": "then"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "then"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         },
         {
           "type": "CHOICE",
@@ -442,6 +458,18 @@
           "type": "CHOICE",
           "members": [
             {
+              "type": "STRING",
+              "value": "do"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
               "type": "SYMBOL",
               "name": "_statement"
             },
@@ -510,6 +538,18 @@
                   }
                 ]
               }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "do"
             },
             {
               "type": "BLANK"
@@ -790,7 +830,7 @@
     },
     "_indent": {
       "type": "PATTERN",
-      "value": "\\t|    "
+      "value": "[\\t ]"
     },
     "_dedent": {
       "type": "PATTERN",
@@ -800,8 +840,17 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "identifier"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "identifier"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "builtin_function"
+            }
+          ]
         },
         {
           "type": "CHOICE",
@@ -844,6 +893,23 @@
               "name": "arguments"
             }
           ]
+        }
+      ]
+    },
+    "builtin_function": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "print"
+        },
+        {
+          "type": "STRING",
+          "value": "ipairs"
+        },
+        {
+          "type": "STRING",
+          "value": "pairs"
         }
       ]
     },
