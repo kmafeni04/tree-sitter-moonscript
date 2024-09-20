@@ -12,6 +12,8 @@ module.exports = grammar({
     [$.variable_list, $._expression, $.function_call],
     [$.variable_list, $.variable_list],
     [$.expression_list, $.expression_list],
+    [$.dot_expression, $.expression_list],
+    [$.dot_expression, $.dot_expression],
     [$.block, $.block],
     [$._statement, $.function_declaration],
     [$.if_statement, $.if_statement],
@@ -33,6 +35,7 @@ module.exports = grammar({
           $.variable_statement,
           $.update_statement,
           $.expression_list,
+          $.dot_expression,
           $.if_statement,
           $.for_statement,
           $.while_statement,
@@ -125,6 +128,7 @@ module.exports = grammar({
           $.nil,
           $.string,
           $.number,
+          $.self,
           $.identifier,
           $.table_constructor,
           $.function_declaration,
@@ -153,22 +157,30 @@ module.exports = grammar({
     arguments: ($) => alias($.expression_list, "arguments"),
 
     // Todo finish table fields
-    table_constructor: ($) => seq("{", optional($._field_list), "}"),
+    table_constructor: ($) => seq("{", optional($._table_field_list), "}"),
 
-    _field_list: ($) =>
+    _table_field_list: ($) =>
       seq(
         optional($._new_line),
-        $.field,
-        repeat(seq(",", optional($._new_line), $.field)),
+        $.table_field,
+        repeat(seq(",", optional($._new_line), $.table_field)),
         optional(","),
         optional($._new_line),
       ),
 
-    field: ($) =>
+    table_field: ($) =>
       choice(
-        seq("[", choice($.number, $.string), "]", ":", $._expression),
+        seq(
+          choice(seq("[", choice($.number, $.string), "]"), $.identifier),
+          ":",
+          $._expression,
+        ),
         alias($._expression, "field"),
       ),
+
+    dot_expression: ($) =>
+      seq($._expression, ".", $.dot_field, repeat(seq(".", $.dot_field))),
+    dot_field: ($) => $._expression,
 
     identifier: ($) => choice(/[a-zA-Z_][a-zA-Z0-9_]*/, $._constant_identifier),
     _constant_identifier: (_) => /[A-Z][A-Z0-9_]*/,
@@ -182,6 +194,8 @@ module.exports = grammar({
     false: (_) => "false",
     true: (_) => "true",
     nil: (_) => "nil",
+
+    self: (_) => "self",
 
     string: ($) =>
       seq('"', repeat(choice($.interpolation, $._string_content)), '"'),

@@ -87,6 +87,10 @@
             },
             {
               "type": "SYMBOL",
+              "name": "dot_expression"
+            },
+            {
+              "type": "SYMBOL",
               "name": "if_statement"
             },
             {
@@ -738,6 +742,10 @@
             },
             {
               "type": "SYMBOL",
+              "name": "self"
+            },
+            {
+              "type": "SYMBOL",
               "name": "identifier"
             },
             {
@@ -934,7 +942,7 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "_field_list"
+              "name": "_table_field_list"
             },
             {
               "type": "BLANK"
@@ -947,7 +955,7 @@
         }
       ]
     },
-    "_field_list": {
+    "_table_field_list": {
       "type": "SEQ",
       "members": [
         {
@@ -964,7 +972,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "field"
+          "name": "table_field"
         },
         {
           "type": "REPEAT",
@@ -989,7 +997,7 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "field"
+                "name": "table_field"
               }
             ]
           }
@@ -1020,32 +1028,46 @@
         }
       ]
     },
-    "field": {
+    "table_field": {
       "type": "CHOICE",
       "members": [
         {
           "type": "SEQ",
           "members": [
             {
-              "type": "STRING",
-              "value": "["
-            },
-            {
               "type": "CHOICE",
               "members": [
                 {
-                  "type": "SYMBOL",
-                  "name": "number"
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": "["
+                    },
+                    {
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "SYMBOL",
+                          "name": "number"
+                        },
+                        {
+                          "type": "SYMBOL",
+                          "name": "string"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "]"
+                    }
+                  ]
                 },
                 {
                   "type": "SYMBOL",
-                  "name": "string"
+                  "name": "identifier"
                 }
               ]
-            },
-            {
-              "type": "STRING",
-              "value": "]"
             },
             {
               "type": "STRING",
@@ -1067,6 +1089,43 @@
           "value": "field"
         }
       ]
+    },
+    "dot_expression": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_expression"
+        },
+        {
+          "type": "STRING",
+          "value": "."
+        },
+        {
+          "type": "SYMBOL",
+          "name": "dot_field"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "."
+              },
+              {
+                "type": "SYMBOL",
+                "name": "dot_field"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "dot_field": {
+      "type": "SYMBOL",
+      "name": "_expression"
     },
     "identifier": {
       "type": "CHOICE",
@@ -1140,6 +1199,10 @@
     "nil": {
       "type": "STRING",
       "value": "nil"
+    },
+    "self": {
+      "type": "STRING",
+      "value": "self"
     },
     "string": {
       "type": "SEQ",
@@ -1227,6 +1290,14 @@
     [
       "expression_list",
       "expression_list"
+    ],
+    [
+      "dot_expression",
+      "expression_list"
+    ],
+    [
+      "dot_expression",
+      "dot_expression"
     ],
     [
       "block",

@@ -2,13 +2,19 @@
 
 (hash_bang_line) @comment
 
+(comment) @comment
+
 [(return) (export) (local)] @keyword
 
 (number) @constant
 
+(string) @string
+
 [(false) (true)] @constant.builtin
 
 (nil) @constant.builtin
+
+(self) @variable.builtin
 
 [
   ","
@@ -53,6 +59,12 @@
   "}"
 ] @constructor)
 
+(table_field) @variable.other.member
+
+(dot_expression
+  (dot_field) @variable.other.member
+  )
+
 (function_declaration) @function
 
 (function_call
@@ -61,11 +73,6 @@
 
 (function_call
   (builtin_function) @function.builtin )
-
-(function_call 
-  (identifier)
-  (arguments
-    ) @variable) 
 
 (if_statement
 [
