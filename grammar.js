@@ -193,7 +193,7 @@ module.exports = grammar({
     _constant_identifier: (_) => /[A-Z][A-Z0-9_]*/,
 
     comment: (_) =>
-      choice(seq("--", /[^\r\n]*/), seq(seq("--[[", /[^🖼]+\]\]/))),
+      choice(seq("--", /[^\r\n]*/), seq(seq("--[[", /[^🖼]+\]\]/)), "--[[]]"),
 
     false: (_) => "false",
     true: (_) => "true",

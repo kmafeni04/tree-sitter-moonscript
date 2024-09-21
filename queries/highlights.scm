@@ -61,13 +61,16 @@
 ] @constructor)
 
  (table_constructor
-  (table_field) @variable.other.member)
+  (table_field) @function.method)
 
-(dot_field) @variable.other.member
+(dot_field) @function.method
+
+(function_declaration) @function
 
 (function_declaration
-  (function_parameters) @variable.parameter
-  ) @function
+  (function_parameters) @variable.parameter) @function
+
+(function_call) @function
 
 (function_call
   (identifier) @function
