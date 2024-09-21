@@ -20,6 +20,7 @@ module.exports = grammar({
     [$.dot_expression, $.dot_expression],
     [$.function_declaration, $.function_declaration],
     [$.function_declaration, $.function_call],
+    [$.dot_field, $.function_call],
   ],
 
   rules: {
@@ -167,10 +168,13 @@ module.exports = grammar({
         "collectgarbage",
         "dofile",
         "error",
+        "getfenv",
         "getmetatable",
         "ipairs",
         "load",
         "loadfile",
+        "loadstring",
+        "module",
         "next",
         "pairs",
         "pcall",
@@ -182,9 +186,11 @@ module.exports = grammar({
         "require",
         "select",
         "setmetatable",
+        "setfenv",
         "tonumber",
         "tostring",
         "type",
+        "unpack",
         "warn",
         "xpcall",
       ),
@@ -215,13 +221,16 @@ module.exports = grammar({
 
     dot_expression: ($) => seq($._expression, repeat1($.dot_field)),
     dot_field: ($) =>
-      choice(seq(".", $.identifier), seq("[", choice($.number, $.string), "]")),
+      choice(
+        seq(".", choice($.identifier, $.function_call)),
+        seq("[", choice($.number, $.string), "]"),
+      ),
 
     identifier: ($) => choice(/[a-zA-Z_][a-zA-Z0-9_]*/, $._constant_identifier),
     _constant_identifier: (_) => /[A-Z][A-Z0-9_]*/,
 
     comment: (_) =>
-      choice(seq("--", /[^\r\n]*/), seq(seq("--[[", /[^🖼]+\]\]/)), "--[[]]"),
+      choice(seq("--", /[^\r\n]*/), seq(seq("--[[", /[^⊙]+\]\]/)), "--[[]]"),
 
     false: (_) => "false",
     true: (_) => "true",

@@ -253,6 +253,10 @@
       "required": true,
       "types": [
         {
+          "type": "function_call",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
@@ -1430,6 +1434,10 @@
   },
   {
     "type": "loadfile",
+    "named": false
+  },
+  {
+    "type": "loadstring",
     "named": false
   },
   {

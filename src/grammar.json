@@ -1004,6 +1004,10 @@
         },
         {
           "type": "STRING",
+          "value": "loadstring"
+        },
+        {
+          "type": "STRING",
           "value": "next"
         },
         {
@@ -1264,8 +1268,17 @@
               "value": "."
             },
             {
-              "type": "SYMBOL",
-              "name": "identifier"
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SYMBOL",
+                  "name": "identifier"
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "function_call"
+                }
+              ]
             }
           ]
         },
@@ -1342,7 +1355,7 @@
                 },
                 {
                   "type": "PATTERN",
-                  "value": "[^🖼]+\\]\\]"
+                  "value": "[^⊙]+\\]\\]"
                 }
               ]
             }
@@ -1487,6 +1500,10 @@
     ],
     [
       "function_declaration",
+      "function_call"
+    ],
+    [
+      "dot_field",
       "function_call"
     ]
   ],
