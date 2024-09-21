@@ -9,6 +9,9 @@
 (number) @constant
 
 (string) @string
+(interpolation
+  ["#{"] @punctuation.bracket
+  )
 
 [(false) (true)] @constant.builtin
 
@@ -50,6 +53,11 @@
   "!="
   "<"
   ">"
+  "+"
+  "-"
+  "/"
+  "*"
+  "%"
 ] @operator
 
 (identifier) @variable
@@ -71,6 +79,9 @@
 
 (function_declaration
   (function_parameters) @variable.parameter) @function
+(function_declaration
+  (function_parameters
+    (varargs) @constant ) @variable.parameter) @function
 
 (function_call) @function
 
@@ -126,6 +137,22 @@
   "while"
   "do"
 ] @keyword.control)
+
+(list_comprehension
+[
+  "for"
+  "in"
+  "when" 
+]  @keyword.control
+)
+
+(table_comprehension
+[
+  "for"
+  "in"
+  "when" 
+]  @keyword.control
+)
 
 
 

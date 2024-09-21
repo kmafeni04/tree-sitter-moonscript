@@ -1,26 +1,30 @@
 /// <reference types="tree-sitter-cli/dsl" />
 // @ts-check
 
+const PREC = {
+  statement: 10,
+  binary: 4,
+  unary: 5,
+  math: 3,
+  expr: 2,
+  compare: 3,
+  concat: 1,
+};
+
 module.exports = grammar({
   name: "moonscript",
 
   extras: ($) => [$.comment, /[ \t]/],
 
   conflicts: ($) => [
+    [$._expression, $._expression],
     [$._expression, $.variable_list],
-    [$._expression, $.function_call],
     [$._expression, $.function_parameters],
-    [$.variable_list, $._expression, $.function_call],
+    [$.variable_list, $.function_parameters],
     [$.variable_list, $.variable_list],
-    [$.expression_list, $.expression_list],
-    [$.dot_expression, $.expression_list],
     [$.block, $.block],
-    [$._statement, $.function_declaration],
     [$.if_statement, $.if_statement],
-    [$.dot_expression, $.dot_expression],
     [$.function_declaration, $.function_declaration],
-    [$.function_declaration, $.function_call],
-    [$.dot_field, $.function_call],
   ],
 
   rules: {
@@ -33,17 +37,20 @@ module.exports = grammar({
     hash_bang_line: (_) => /#.*/,
 
     _statement: ($) =>
-      seq(
-        optional(choice($.return, $.export)),
-        choice(
-          $.variable_statement,
-          $.update_statement,
-          $.expression_list,
-          $.dot_expression,
-          $.if_statement,
-          $.for_statement,
-          $.while_statement,
-          $._new_line,
+      prec(
+        PREC.statement,
+        seq(
+          optional(choice($.return, $.export)),
+          choice(
+            $.variable_statement,
+            $.update_statement,
+            $.expression_list,
+            $.dot_expression,
+            $.if_statement,
+            $.for_statement,
+            $.while_statement,
+            $._new_line,
+          ),
         ),
       ),
 
@@ -57,7 +64,8 @@ module.exports = grammar({
 
     assignment_statement: ($) => seq($.variable_list, "=", $.expression_list),
 
-    variable_list: ($) => seq($.identifier, repeat(seq(",", $.identifier))),
+    variable_list: ($) =>
+      prec.right(seq($.identifier, repeat(seq(",", $.identifier)))),
 
     update_statement: ($) =>
       seq($.identifier, $._update_operator, /[^\r\n]/, $._expression),
@@ -117,29 +125,142 @@ module.exports = grammar({
       ),
 
     comparison_expression: ($) =>
-      seq($.identifier, $._comparison_operator, $._expression),
+      prec.right(
+        PREC.compare,
+        seq(
+          $._expression,
+          $._comparison_operator,
+          $._expression,
+          repeat(seq($._comparison_operator, $._expression)),
+        ),
+      ),
     _comparison_operator: (_) =>
       choice("==", "<=", ">=", "~=", "!=", "<", ">", "and", "or"),
 
-    expression_list: ($) => seq($._expression, repeat(seq(",", $._expression))),
+    expression_list: ($) =>
+      prec.right(
+        PREC.expr,
+        seq($._expression, repeat(seq(",", $._expression))),
+      ),
 
     _expression: ($) =>
-      seq(
-        optional("not"),
-        choice(
-          $.true,
-          $.false,
-          $.nil,
-          $.string,
-          $.number,
-          $.self,
-          $.identifier,
-          $.table_constructor,
-          $.function_declaration,
-          $.function_call,
-          $.comparison_expression,
+      prec.right(
+        seq(
+          optional($.unary_operator),
+          choice(
+            $.true,
+            $.false,
+            $.nil,
+            $.string,
+            $.number,
+            $.self,
+            $.identifier,
+            $.table_constructor,
+            $.table_comprehension,
+            $.function_declaration,
+            $.function_call,
+            $.comparison_expression,
+            $.concat_expression,
+            $.math_expression,
+            $.list_comprehension,
+            seq("(", $._expression, ")"),
+          ),
         ),
       ),
+
+    list_comprehension: ($) =>
+      seq("[", $._expression, $._list_for, repeat($._list_for), "]"),
+
+    _list_for: ($) =>
+      seq(
+        "for",
+        choice(
+          seq(
+            choice(
+              seq($.identifier, ",", $.identifier, "in"),
+              seq($.identifier, "=", $.number, repeat(seq(",", $.number))),
+            ),
+            choice(
+              $.function_call,
+              seq(optional($.identifier), "when", $._expression),
+            ),
+          ),
+          seq(
+            $.identifier,
+            "in",
+            "*",
+            $.identifier,
+            optional(
+              seq(
+                "[",
+                optional($.number),
+                optional(","),
+                optional($.number),
+                optional(","),
+                optional($.number),
+                "]",
+              ),
+            ),
+          ),
+        ),
+      ),
+
+    table_comprehension: ($) =>
+      seq(
+        "{",
+        choice(
+          seq(
+            $.identifier,
+            ",",
+            $.identifier,
+            "for",
+            $.identifier,
+            ",",
+            $.identifier,
+            "in",
+            $.function_call,
+            optional(seq("when", $._expression)),
+          ),
+          seq(
+            optional(seq($.identifier, ",")),
+            $.expression_list,
+            "for",
+            $.identifier,
+            "in",
+            "*",
+            $.identifier,
+          ),
+        ),
+        "}",
+      ),
+
+    concat_expression: ($) =>
+      prec.right(
+        PREC.concat,
+        seq(
+          $._expression,
+          "..",
+          $._expression,
+          repeat(seq("..", $._expression)),
+        ),
+      ),
+
+    unary_operator: (_) => prec(PREC.unary, choice("not", "#", "-", "~")),
+
+    math_expression: ($) =>
+      prec.left(
+        PREC.math,
+        choice(
+          seq(
+            $._expression,
+            $._math_operator,
+            $._expression,
+            repeat(seq($._math_operator, $._expression)),
+          ),
+          seq("(", $.math_expression, ")"),
+        ),
+      ),
+    _math_operator: (_) => choice("+", "-", "*", "/", "%"),
 
     function_declaration: ($) =>
       seq(
@@ -149,7 +270,12 @@ module.exports = grammar({
       ),
 
     function_parameters: ($) =>
-      seq($.identifier, repeat(seq(",", $.identifier))),
+      seq(
+        choice($.identifier, $.assignment_statement, $.varargs),
+        repeat(seq(",", choice($.identifier, $.assignment_statement))),
+        optional($.varargs),
+      ),
+    varargs: (_) => "...",
     block: ($) => seq(repeat1(seq($._new_line, $._indent, $._statement))),
 
     _new_line: (_) => /\r?\n/,
@@ -157,9 +283,11 @@ module.exports = grammar({
     _dedent: (_) => /\r?\n(?:[ \t]*)/,
 
     function_call: ($) =>
-      seq(
-        choice($.identifier, $.builtin_function),
-        choice("!", "()", seq("(", optional($.arguments), ")"), $.arguments),
+      prec.left(
+        seq(
+          choice($.identifier, $.builtin_function),
+          choice("!", "()", seq("(", optional($.arguments), ")"), $.arguments),
+        ),
       ),
 
     builtin_function: (_) =>
@@ -195,35 +323,61 @@ module.exports = grammar({
         "xpcall",
       ),
 
-    arguments: ($) => alias($.expression_list, "arguments"),
+    arguments: ($) =>
+      prec.right(
+        seq(
+          $._expression,
+          repeat(
+            seq(",", optional(seq($._new_line, $._indent)), $._expression),
+          ),
+        ),
+      ),
 
     // Todo finish table fields
-    table_constructor: ($) => seq("{", optional($._table_field_list), "}"),
+    table_constructor: ($) =>
+      prec.right(choice(seq("{", optional($._table_field_list), "}"))),
 
     _table_field_list: ($) =>
-      seq(
-        optional($._new_line),
-        $.table_field,
-        repeat(seq(",", optional($._new_line), $.table_field)),
-        optional(","),
-        optional($._new_line),
+      prec.right(
+        seq(
+          optional($._new_line),
+          $.table_field,
+          repeat(
+            seq(
+              choice(",", seq($._new_line, $._indent)),
+              optional($._new_line),
+              $.table_field,
+            ),
+          ),
+          optional(","),
+          optional($._new_line),
+        ),
       ),
 
     table_field: ($) =>
       choice(
         seq(
-          choice(seq("[", choice($.number, $.string), "]"), $.identifier),
+          choice(
+            seq("[", choice($.number, $.string, $._expression), "]"),
+            $.identifier,
+            $.string,
+          ),
           ":",
           $._expression,
         ),
-        alias($._expression, "field"),
+        $.variable_field,
+        $._expression,
       ),
 
-    dot_expression: ($) => seq($._expression, repeat1($.dot_field)),
+    variable_field: ($) => seq(":", $.identifier),
+
+    dot_expression: ($) => prec.left(seq($._expression, repeat1($.dot_field))),
     dot_field: ($) =>
-      choice(
-        seq(".", choice($.identifier, $.function_call)),
-        seq("[", choice($.number, $.string), "]"),
+      prec.right(
+        choice(
+          seq(".", choice($.identifier, $.function_call)),
+          seq("[", choice($.number, $.string), "]"),
+        ),
       ),
 
     identifier: ($) => choice(/[a-zA-Z_][a-zA-Z0-9_]*/, $._constant_identifier),
@@ -240,7 +394,7 @@ module.exports = grammar({
 
     string: ($) =>
       seq('"', repeat(choice($.interpolation, $._string_content)), '"'),
-    _string_content: () => /[^"#]+|#[^{]/,
+    _string_content: () => /[^"#]+/,
     interpolation: ($) => seq("#{", $._expression, "}"),
     number: (_) => /\d+(\.\d+)?/,
   },
