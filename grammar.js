@@ -14,10 +14,12 @@ module.exports = grammar({
     [$.variable_list, $.variable_list],
     [$.expression_list, $.expression_list],
     [$.dot_expression, $.expression_list],
-    [$.dot_expression, $.dot_expression],
     [$.block, $.block],
     [$._statement, $.function_declaration],
     [$.if_statement, $.if_statement],
+    [$.dot_expression, $.dot_expression],
+    [$.function_declaration, $.function_declaration],
+    [$.function_declaration, $.function_call],
   ],
 
   rules: {
@@ -140,9 +142,9 @@ module.exports = grammar({
 
     function_declaration: ($) =>
       seq(
-        choice("()", seq("(", $.function_parameters, ")")),
+        optional(choice("()", seq("(", $.function_parameters, ")"))),
         choice("->", "=>"),
-        choice($._new_line, $._statement, $.block),
+        optional(choice($._new_line, $._statement, $.block)),
       ),
 
     function_parameters: ($) =>
@@ -159,7 +161,33 @@ module.exports = grammar({
         choice("!", "()", seq("(", optional($.arguments), ")"), $.arguments),
       ),
 
-    builtin_function: (_) => choice("print", "ipairs", "pairs"),
+    builtin_function: (_) =>
+      choice(
+        "assert",
+        "collectgarbage",
+        "dofile",
+        "error",
+        "getmetatable",
+        "ipairs",
+        "load",
+        "loadfile",
+        "next",
+        "pairs",
+        "pcall",
+        "print",
+        "rawequal",
+        "rawget",
+        "rawlen",
+        "rawset",
+        "require",
+        "select",
+        "setmetatable",
+        "tonumber",
+        "tostring",
+        "type",
+        "warn",
+        "xpcall",
+      ),
 
     arguments: ($) => alias($.expression_list, "arguments"),
 
@@ -185,9 +213,9 @@ module.exports = grammar({
         alias($._expression, "field"),
       ),
 
-    dot_expression: ($) =>
-      seq($._expression, ".", $.dot_field, repeat(seq(".", $.dot_field))),
-    dot_field: ($) => $._expression,
+    dot_expression: ($) => seq($._expression, repeat1($.dot_field)),
+    dot_field: ($) =>
+      choice(seq(".", $.identifier), seq("[", choice($.number, $.string), "]")),
 
     identifier: ($) => choice(/[a-zA-Z_][a-zA-Z0-9_]*/, $._constant_identifier),
     _constant_identifier: (_) => /[A-Z][A-Z0-9_]*/,

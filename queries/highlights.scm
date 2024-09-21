@@ -61,9 +61,11 @@
 ] @constructor)
 
  (table_constructor
-  (table_field) @function.method)
+  (table_field 
+    (identifier) @variable.other.method))
 
-(dot_field) @function.method
+(dot_field
+  (identifier) @variable.other.method)
 
 (function_declaration) @function
 

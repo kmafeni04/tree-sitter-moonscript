@@ -253,27 +253,7 @@
       "required": true,
       "types": [
         {
-          "type": "comparison_expression",
-          "named": true
-        },
-        {
-          "type": "false",
-          "named": true
-        },
-        {
-          "type": "function_call",
-          "named": true
-        },
-        {
-          "type": "function_declaration",
-          "named": true
-        },
-        {
           "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "nil",
           "named": true
         },
         {
@@ -281,19 +261,7 @@
           "named": true
         },
         {
-          "type": "self",
-          "named": true
-        },
-        {
           "type": "string",
-          "named": true
-        },
-        {
-          "type": "table_constructor",
-          "named": true
-        },
-        {
-          "type": "true",
           "named": true
         }
       ]
@@ -1397,7 +1365,19 @@
     "named": false
   },
   {
+    "type": "assert",
+    "named": false
+  },
+  {
+    "type": "collectgarbage",
+    "named": false
+  },
+  {
     "type": "do",
+    "named": false
+  },
+  {
+    "type": "dofile",
     "named": false
   },
   {
@@ -1406,6 +1386,10 @@
   },
   {
     "type": "elseif",
+    "named": false
+  },
+  {
+    "type": "error",
     "named": false
   },
   {
@@ -1418,6 +1402,10 @@
   },
   {
     "type": "for",
+    "named": false
+  },
+  {
+    "type": "getmetatable",
     "named": false
   },
   {
@@ -1437,8 +1425,20 @@
     "named": false
   },
   {
+    "type": "load",
+    "named": false
+  },
+  {
+    "type": "loadfile",
+    "named": false
+  },
+  {
     "type": "local",
     "named": true
+  },
+  {
+    "type": "next",
+    "named": false
   },
   {
     "type": "nil",
@@ -1465,7 +1465,31 @@
     "named": false
   },
   {
+    "type": "pcall",
+    "named": false
+  },
+  {
     "type": "print",
+    "named": false
+  },
+  {
+    "type": "rawequal",
+    "named": false
+  },
+  {
+    "type": "rawget",
+    "named": false
+  },
+  {
+    "type": "rawlen",
+    "named": false
+  },
+  {
+    "type": "rawset",
+    "named": false
+  },
+  {
+    "type": "require",
     "named": false
   },
   {
@@ -1473,11 +1497,27 @@
     "named": true
   },
   {
+    "type": "select",
+    "named": false
+  },
+  {
     "type": "self",
     "named": true
   },
   {
+    "type": "setmetatable",
+    "named": false
+  },
+  {
     "type": "then",
+    "named": false
+  },
+  {
+    "type": "tonumber",
+    "named": false
+  },
+  {
+    "type": "tostring",
     "named": false
   },
   {
@@ -1485,7 +1525,19 @@
     "named": true
   },
   {
+    "type": "type",
+    "named": false
+  },
+  {
+    "type": "warn",
+    "named": false
+  },
+  {
     "type": "while",
+    "named": false
+  },
+  {
+    "type": "xpcall",
     "named": false
   },
   {
