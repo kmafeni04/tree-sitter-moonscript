@@ -1,3 +1,1 @@
-switch name
-  when "Robert"
-    print "You are Robert"
+import insert,lol from table

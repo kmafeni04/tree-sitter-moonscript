@@ -45,16 +45,18 @@ module.exports = grammar({
       prec(
         PREC.statement,
         seq(
-          optional(choice($.return, $.export, $.continue)),
+          optional(choice($.return, $.export, $.continue, $.super)),
           choice(
             $.variable_statement,
             $.update_statement,
             $.expression_list,
+            $.import_statement,
             $.if_statement,
             $.unless_statement,
             $.for_statement,
             $.while_statement,
             $.switch_statement,
+            $.class_statement,
             $._new_line,
           ),
         ),
@@ -63,6 +65,26 @@ module.exports = grammar({
     return: (_) => "return",
     export: (_) => "export",
     continue: (_) => "continue",
+    class: (_) => "class",
+    super: (_) => "super",
+
+    class_statement: ($) =>
+      seq(
+        $.class,
+        $.class_identifier,
+        optional(seq("extends", $.class_identifier)),
+        $.block,
+      ),
+    class_identifier: (_) => /[A-Z][a-zA-Z]*/,
+
+    import_statement: ($) =>
+      seq(
+        "import",
+        $.identifier,
+        repeat(seq(",", $.identifier)),
+        "from",
+        $.identifier,
+      ),
 
     variable_statement: ($) =>
       seq(optional($.local), choice($.variable_list, $.assignment_statement)),
@@ -73,14 +95,23 @@ module.exports = grammar({
       seq(
         $.variable_list,
         "=",
-        choice($.expression_list, $.for_statement, $.if_statement),
+        choice(
+          $.expression_list,
+          $.for_statement,
+          $.if_statement,
+          $.switch_statement,
+        ),
       ),
 
     variable_list: ($) =>
       prec.right(seq($.identifier, repeat(seq(",", $.identifier)))),
 
     update_statement: ($) =>
-      seq($.identifier, $._update_operator, $._expression),
+      seq(
+        choice($.identifier, $.dot_expression),
+        $._update_operator,
+        $._expression,
+      ),
 
     _update_operator: (_) =>
       choice("+=", "-=", "*=", "/=", "%=", "and=", "or=", "..="),
@@ -135,7 +166,8 @@ module.exports = grammar({
         ),
       ),
 
-    switch_when: ($) => seq("when", $._expression, $.block),
+    switch_when: ($) =>
+      seq("when", $._expression, choice(seq("then", $._statement), $.block)),
 
     switch_else: ($) => seq("else", choice($._statement, $.block)),
 
@@ -411,21 +443,27 @@ module.exports = grammar({
         ),
         $.variable_field,
         $._expression,
+        $.update_statement,
+        $.assignment_statement,
       ),
 
     variable_field: ($) => seq(":", $.identifier),
 
-    dot_expression: ($) => prec.left(seq($._expression, repeat1($.dot_field))),
+    dot_expression: ($) =>
+      seq($._expression, repeat1(choice($.dot_field, $.bracket_field))),
     dot_field: ($) =>
-      prec.right(
-        choice(
-          seq(".", choice($.identifier, $.function_call)),
-          seq("[", choice($.number, $.string), "]"),
-        ),
-      ),
+      prec.right(seq(choice(".", "\\"), choice($.identifier, $.function_call))),
 
-    identifier: ($) => choice(/[a-zA-Z_][a-zA-Z0-9_]*/, $._constant_identifier),
+    bracket_field: ($) => seq(token.immediate("["), $._expression, "]"),
+
+    identifier: ($) =>
+      choice(
+        /[a-zA-Z_][a-zA-Z0-9_]*/,
+        $._constant_identifier,
+        $.self_identifier,
+      ),
     _constant_identifier: (_) => /[A-Z][A-Z0-9_]*/,
+    self_identifier: ($) => /@[a-zA-Z_][a-zA-Z0-9_]*/,
 
     comment: ($) =>
       choice(

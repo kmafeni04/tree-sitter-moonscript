@@ -4,7 +4,7 @@
 
 (comment) @comment
 
-[(return) (export) (local) (continue)] @keyword
+[(return) (export) (local) (continue) (super) (class)] @keyword
 
 (number) @constant
 
@@ -23,6 +23,7 @@
   ","
   ":"
   "."
+  "\\"
 ] @punctuation.delimiter
 
 [
@@ -92,6 +93,13 @@
 (function_call
   (builtin_function) @function.builtin )
 
+(import_statement
+[
+  "import"
+  "from"
+] @keyword.local
+)
+
 (if_statement
 [
   "if"
@@ -118,6 +126,16 @@
 (unless_statement
   ["unless"] @keyword.control
 )
+
+(switch_statement
+  ["switch"] @keyword.control)
+
+(switch_when
+  ["when" "then"] @keyword.control)
+
+(switch_else
+  ["else"] @keyword.control)
+
 
 (for_statement
 [
@@ -159,5 +177,8 @@
 ]  @keyword.control
 )
 
-
-
+(class_statement
+  (class)
+  (class_identifier)
+  "extends" @keyword
+)
