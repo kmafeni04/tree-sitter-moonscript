@@ -16,6 +16,10 @@
           "named": true
         },
         {
+          "type": "dot_expression",
+          "named": true
+        },
+        {
           "type": "false",
           "named": true
         },
@@ -87,6 +91,14 @@
           "named": true
         },
         {
+          "type": "for_statement",
+          "named": true
+        },
+        {
+          "type": "if_statement",
+          "named": true
+        },
+        {
           "type": "variable_list",
           "named": true
         }
@@ -102,7 +114,7 @@
       "required": false,
       "types": [
         {
-          "type": "dot_expression",
+          "type": "continue",
           "named": true
         },
         {
@@ -123,6 +135,14 @@
         },
         {
           "type": "return",
+          "named": true
+        },
+        {
+          "type": "switch_statement",
+          "named": true
+        },
+        {
+          "type": "unless_statement",
           "named": true
         },
         {
@@ -164,6 +184,10 @@
         },
         {
           "type": "concat_expression",
+          "named": true
+        },
+        {
+          "type": "dot_expression",
           "named": true
         },
         {
@@ -242,6 +266,10 @@
           "named": true
         },
         {
+          "type": "dot_expression",
+          "named": true
+        },
+        {
           "type": "false",
           "named": true
         },
@@ -314,6 +342,10 @@
         },
         {
           "type": "concat_expression",
+          "named": true
+        },
+        {
+          "type": "dot_expression",
           "named": true
         },
         {
@@ -419,7 +451,7 @@
           "named": true
         },
         {
-          "type": "dot_expression",
+          "type": "continue",
           "named": true
         },
         {
@@ -440,6 +472,14 @@
         },
         {
           "type": "return",
+          "named": true
+        },
+        {
+          "type": "switch_statement",
+          "named": true
+        },
+        {
+          "type": "unless_statement",
           "named": true
         },
         {
@@ -466,6 +506,10 @@
       "required": true,
       "types": [
         {
+          "type": "assignment_statement",
+          "named": true
+        },
+        {
           "type": "block",
           "named": true
         },
@@ -475,6 +519,10 @@
         },
         {
           "type": "concat_expression",
+          "named": true
+        },
+        {
+          "type": "continue",
           "named": true
         },
         {
@@ -542,6 +590,10 @@
           "named": true
         },
         {
+          "type": "switch_statement",
+          "named": true
+        },
+        {
           "type": "table_comprehension",
           "named": true
         },
@@ -555,6 +607,10 @@
         },
         {
           "type": "unary_operator",
+          "named": true
+        },
+        {
+          "type": "unless_statement",
           "named": true
         },
         {
@@ -586,6 +642,10 @@
         },
         {
           "type": "concat_expression",
+          "named": true
+        },
+        {
+          "type": "dot_expression",
           "named": true
         },
         {
@@ -660,7 +720,7 @@
           "named": true
         },
         {
-          "type": "dot_expression",
+          "type": "continue",
           "named": true
         },
         {
@@ -692,6 +752,77 @@
           "named": true
         },
         {
+          "type": "switch_statement",
+          "named": true
+        },
+        {
+          "type": "unless_statement",
+          "named": true
+        },
+        {
+          "type": "update_statement",
+          "named": true
+        },
+        {
+          "type": "variable_statement",
+          "named": true
+        },
+        {
+          "type": "while_statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "for_item",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "continue",
+          "named": true
+        },
+        {
+          "type": "export",
+          "named": true
+        },
+        {
+          "type": "expression_list",
+          "named": true
+        },
+        {
+          "type": "for_statement",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "return",
+          "named": true
+        },
+        {
+          "type": "switch_statement",
+          "named": true
+        },
+        {
+          "type": "unless_statement",
+          "named": true
+        },
+        {
           "type": "update_statement",
           "named": true
         },
@@ -719,7 +850,7 @@
           "named": true
         },
         {
-          "type": "dot_expression",
+          "type": "continue",
           "named": true
         },
         {
@@ -751,6 +882,14 @@
           "named": true
         },
         {
+          "type": "switch_statement",
+          "named": true
+        },
+        {
+          "type": "unless_statement",
+          "named": true
+        },
+        {
           "type": "update_statement",
           "named": true
         },
@@ -770,7 +909,7 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": true,
       "types": [
         {
@@ -778,7 +917,19 @@
           "named": true
         },
         {
+          "type": "for_item",
+          "named": true
+        },
+        {
           "type": "for_num",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "identifier",
           "named": true
         }
       ]
@@ -820,7 +971,7 @@
           "named": true
         },
         {
-          "type": "dot_expression",
+          "type": "continue",
           "named": true
         },
         {
@@ -845,6 +996,14 @@
         },
         {
           "type": "return",
+          "named": true
+        },
+        {
+          "type": "switch_statement",
+          "named": true
+        },
+        {
+          "type": "unless_statement",
           "named": true
         },
         {
@@ -899,6 +1058,10 @@
       "required": true,
       "types": [
         {
+          "type": "assignment_statement",
+          "named": true
+        },
+        {
           "type": "block",
           "named": true
         },
@@ -908,6 +1071,10 @@
         },
         {
           "type": "concat_expression",
+          "named": true
+        },
+        {
+          "type": "continue",
           "named": true
         },
         {
@@ -983,6 +1150,10 @@
           "named": true
         },
         {
+          "type": "switch_statement",
+          "named": true
+        },
+        {
           "type": "table_comprehension",
           "named": true
         },
@@ -996,6 +1167,10 @@
         },
         {
           "type": "unary_operator",
+          "named": true
+        },
+        {
+          "type": "unless_statement",
           "named": true
         },
         {
@@ -1027,6 +1202,10 @@
         },
         {
           "type": "concat_expression",
+          "named": true
+        },
+        {
+          "type": "dot_expression",
           "named": true
         },
         {
@@ -1105,6 +1284,10 @@
           "named": true
         },
         {
+          "type": "dot_expression",
+          "named": true
+        },
+        {
           "type": "false",
           "named": true
         },
@@ -1138,6 +1321,10 @@
         },
         {
           "type": "self",
+          "named": true
+        },
+        {
+          "type": "slice",
           "named": true
         },
         {
@@ -1180,6 +1367,10 @@
           "named": true
         },
         {
+          "type": "dot_expression",
+          "named": true
+        },
+        {
           "type": "false",
           "named": true
         },
@@ -1239,6 +1430,25 @@
     }
   },
   {
+    "type": "slice",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "source_file",
     "named": true,
     "fields": {},
@@ -1247,7 +1457,7 @@
       "required": false,
       "types": [
         {
-          "type": "dot_expression",
+          "type": "continue",
           "named": true
         },
         {
@@ -1272,6 +1482,14 @@
         },
         {
           "type": "return",
+          "named": true
+        },
+        {
+          "type": "switch_statement",
+          "named": true
+        },
+        {
+          "type": "unless_statement",
           "named": true
         },
         {
@@ -1305,6 +1523,235 @@
     }
   },
   {
+    "type": "switch_else",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "continue",
+          "named": true
+        },
+        {
+          "type": "export",
+          "named": true
+        },
+        {
+          "type": "expression_list",
+          "named": true
+        },
+        {
+          "type": "for_statement",
+          "named": true
+        },
+        {
+          "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "return",
+          "named": true
+        },
+        {
+          "type": "switch_statement",
+          "named": true
+        },
+        {
+          "type": "unless_statement",
+          "named": true
+        },
+        {
+          "type": "update_statement",
+          "named": true
+        },
+        {
+          "type": "variable_statement",
+          "named": true
+        },
+        {
+          "type": "while_statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "switch_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "comparison_expression",
+          "named": true
+        },
+        {
+          "type": "concat_expression",
+          "named": true
+        },
+        {
+          "type": "dot_expression",
+          "named": true
+        },
+        {
+          "type": "false",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "function_declaration",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "list_comprehension",
+          "named": true
+        },
+        {
+          "type": "math_expression",
+          "named": true
+        },
+        {
+          "type": "nil",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "self",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "switch_else",
+          "named": true
+        },
+        {
+          "type": "switch_when",
+          "named": true
+        },
+        {
+          "type": "table_comprehension",
+          "named": true
+        },
+        {
+          "type": "table_constructor",
+          "named": true
+        },
+        {
+          "type": "true",
+          "named": true
+        },
+        {
+          "type": "unary_operator",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "switch_when",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "comparison_expression",
+          "named": true
+        },
+        {
+          "type": "concat_expression",
+          "named": true
+        },
+        {
+          "type": "dot_expression",
+          "named": true
+        },
+        {
+          "type": "false",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "function_declaration",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "list_comprehension",
+          "named": true
+        },
+        {
+          "type": "math_expression",
+          "named": true
+        },
+        {
+          "type": "nil",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "self",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "table_comprehension",
+          "named": true
+        },
+        {
+          "type": "table_constructor",
+          "named": true
+        },
+        {
+          "type": "true",
+          "named": true
+        },
+        {
+          "type": "unary_operator",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "table_comprehension",
     "named": true,
     "fields": {},
@@ -1321,7 +1768,7 @@
           "named": true
         },
         {
-          "type": "expression_list",
+          "type": "dot_expression",
           "named": true
         },
         {
@@ -1415,6 +1862,10 @@
           "named": true
         },
         {
+          "type": "dot_expression",
+          "named": true
+        },
+        {
           "type": "false",
           "named": true
         },
@@ -1483,6 +1934,133 @@
     "fields": {}
   },
   {
+    "type": "unless_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "comparison_expression",
+          "named": true
+        },
+        {
+          "type": "concat_expression",
+          "named": true
+        },
+        {
+          "type": "continue",
+          "named": true
+        },
+        {
+          "type": "dot_expression",
+          "named": true
+        },
+        {
+          "type": "export",
+          "named": true
+        },
+        {
+          "type": "expression_list",
+          "named": true
+        },
+        {
+          "type": "false",
+          "named": true
+        },
+        {
+          "type": "for_statement",
+          "named": true
+        },
+        {
+          "type": "function_call",
+          "named": true
+        },
+        {
+          "type": "function_declaration",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "list_comprehension",
+          "named": true
+        },
+        {
+          "type": "math_expression",
+          "named": true
+        },
+        {
+          "type": "nil",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "return",
+          "named": true
+        },
+        {
+          "type": "self",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        },
+        {
+          "type": "switch_statement",
+          "named": true
+        },
+        {
+          "type": "table_comprehension",
+          "named": true
+        },
+        {
+          "type": "table_constructor",
+          "named": true
+        },
+        {
+          "type": "true",
+          "named": true
+        },
+        {
+          "type": "unary_operator",
+          "named": true
+        },
+        {
+          "type": "unless_statement",
+          "named": true
+        },
+        {
+          "type": "update_statement",
+          "named": true
+        },
+        {
+          "type": "variable_statement",
+          "named": true
+        },
+        {
+          "type": "while_statement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "update_statement",
     "named": true,
     "fields": {},
@@ -1496,6 +2074,10 @@
         },
         {
           "type": "concat_expression",
+          "named": true
+        },
+        {
+          "type": "dot_expression",
           "named": true
         },
         {
@@ -1631,6 +2213,10 @@
           "named": true
         },
         {
+          "type": "continue",
+          "named": true
+        },
+        {
           "type": "dot_expression",
           "named": true
         },
@@ -1695,6 +2281,10 @@
           "named": true
         },
         {
+          "type": "switch_statement",
+          "named": true
+        },
+        {
           "type": "table_comprehension",
           "named": true
         },
@@ -1708,6 +2298,10 @@
         },
         {
           "type": "unary_operator",
+          "named": true
+        },
+        {
+          "type": "unless_statement",
           "named": true
         },
         {
@@ -1870,6 +2464,10 @@
     "named": false
   },
   {
+    "type": "]]",
+    "named": false
+  },
+  {
     "type": "and",
     "named": false
   },
@@ -1884,6 +2482,10 @@
   {
     "type": "collectgarbage",
     "named": false
+  },
+  {
+    "type": "continue",
+    "named": true
   },
   {
     "type": "do",
@@ -2038,6 +2640,10 @@
     "named": false
   },
   {
+    "type": "switch",
+    "named": false
+  },
+  {
     "type": "then",
     "named": false
   },
@@ -2055,6 +2661,10 @@
   },
   {
     "type": "type",
+    "named": false
+  },
+  {
+    "type": "unless",
     "named": false
   },
   {

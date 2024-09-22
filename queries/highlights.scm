@@ -4,7 +4,7 @@
 
 (comment) @comment
 
-[(return) (export) (local)] @keyword
+[(return) (export) (local) (continue)] @keyword
 
 (number) @constant
 
@@ -115,6 +115,10 @@
 
 (else) @keyword.control
 
+(unless_statement
+  ["unless"] @keyword.control
+)
+
 (for_statement
 [
   "for"
@@ -137,6 +141,7 @@
   "while"
   "do"
 ] @keyword.control)
+
 
 (list_comprehension
 [

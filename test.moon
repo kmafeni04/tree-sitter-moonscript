@@ -1,1 +1,3 @@
-slice = [item for item in *items[,2]]
+switch name
+  when "Robert"
+    print "You are Robert"
